@@ -4,16 +4,13 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
 
-
 passport.use(
-    // Configure the Google strategy for use by Passport
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    // Callback function to handle the response from Google
     async function (accessToken, refreshToken, profile, done) {
       const newUser = {
         googleId: profile.id,
@@ -22,7 +19,7 @@ passport.use(
         lastName: profile.name.familyName,
         profileImage: profile.photos[0].value,
       };
-        // Check if user already exists in our db
+
       try {
         let user = await User.findOne({ googleId: profile.id });
         if (user) {
